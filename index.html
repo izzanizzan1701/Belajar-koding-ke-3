@@ -1,148 +1,212 @@
-/* DailyLife Hub — React + Tailwind (Colorful & Energetic)
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wallpaper Gallery</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#8b5cf6;
+      --gap:16px; --radius:14px; --glass: rgba(255,255,255,0.04);
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#e6eef6;background:linear-gradient(180deg,#071028 0%, #071126 60%);}
+    .wrap{max-width:var(--max-width);margin:28px auto;padding:20px}
 
-How to use:
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#00d4ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
 
-1. Create a React app (Vite recommended): npm create vite@latest dailylifehub -- --template react cd dailylifehub
+    .controls{display:flex;gap:8px;align-items:center}
+    .search{display:flex;align-items:center;background:var(--card);padding:8px;border-radius:12px;padding-left:12px;gap:8px}
+    .search input{background:transparent;border:0;outline:none;color:inherit;font-size:14px;width:220px}
+    .select, .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .btn{display:inline-flex;align-items:center;gap:8px;color:white;background:linear-gradient(90deg,var(--accent),#00d4ff);border:none}
 
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--gap)}
+    .card{position:relative;border-radius:var(--radius);overflow:hidden;min-height:140px;background:#061020;box-shadow:0 6px 18px rgba(2,6,23,0.6);transition:transform .22s ease}
+    .card:hover{transform:translateY(-6px)}
+    .card img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta{position:absolute;left:10px;bottom:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .tag{background:linear-gradient(90deg,rgba(0,0,0,0.45),rgba(0,0,0,0.15));padding:6px 8px;border-radius:999px;color:#fff;font-size:12px}
+    .title{font-weight:600;color:white;font-size:13px}
 
-2. Install dependencies: npm install npm install -D tailwindcss postcss autoprefixer npx tailwindcss init -p npm install framer-motion lucide-react html2pdf.js (optional) npm install @shadcn/ui
+    .modal{position:fixed;inset:0;background:rgba(2,6,23,0.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60;opacity:0;pointer-events:none;transition:opacity .18s}
+    .modal.open{opacity:1;pointer-events:auto}
+    .modal-card{max-width:1100px;width:100%;background:linear-gradient(180deg, rgba(8,12,20,0.95), rgba(2,6,23,0.98));border-radius:14px;overflow:hidden;display:grid;grid-template-columns:1fr 340px;gap:12px;align-items:stretch}
+    .modal-left{position:relative;background:#000;min-height:60vh}
+    .modal-left img{width:100%;height:100%;object-fit:contain;background:#000}
+    .modal-right{padding:18px;color:var(--muted)}
+    .modal-right h3{margin:0;color:white}
+    .modal-actions{margin-top:14px;display:flex;gap:8px}
+    .small{font-size:13px}
 
+    footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
 
-3. Configure Tailwind (tailwind.config.cjs): module.exports = { content: ['./index.html','./src/**/*.{js,jsx,ts,tsx}'], theme: { extend: {} }, plugins: [], }
+    @media (max-width:880px){
+      .modal-card{grid-template-columns:1fr}
+      .search input{width:120px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">WP</div>
+        <div>
+          <h1>Wallpaper Gallery</h1>
+          <p class="lead">Koleksi wallpaper keren untuk desktop dan HP</p>
+        </div>
+      </div>
 
-
-4. Add Tailwind directives to src/index.css: @tailwind base; @tailwind components; @tailwind utilities;
-
-
-5. Replace src/App.jsx with the component below. Run: npm run dev
-
-
-
-Notes:
-
-This is a single-component demo focused on UX and Tailwind styling.
-
-You can split into smaller components (Header, Todo, Widgets) after verifying layout. */
-
-
-import React, { useEffect, useMemo, useState } from 'react'; import { motion } from 'framer-motion'; import { Sun, Moon, Download, CloudRain, CheckSquare } from 'lucide-react';
-
-export default function App() { // theme const [isDark, setIsDark] = useState(true);
-
-// clock const [time, setTime] = useState(''); useEffect(() => { const t = () => { const d = new Date(); setTime(${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}); }; t(); const id = setInterval(t, 1000); return () => clearInterval(id); }, []);
-
-// quotes & tips const quotes = useMemo(()=>[ 'Kerjakan yang kamu bisa hari ini — langkah kecil tetap berarti.', 'Konsistensi mengalahkan intensitas yang sesekali.', 'Jeda 2 menit: tarik napas, fokus lagi.', 'Selesaikan tugas paling penting pagi ini.' ],[]); const tips = useMemo(()=>[ 'Buat 3 prioritas utama setiap pagi.', 'Siapkan pakaian dan tas malam sebelumnya.', 'Pomodoro: 25 menit fokus + 5 menit istirahat.', 'Minum segelas air setelah bangun.' ],[]);
-
-const pick = arr => arr[Math.floor(Math.random()*arr.length)]; const [quote, setQuote] = useState(pick(quotes)); const [tip, setTip] = useState(pick(tips));
-
-// todos const [todos, setTodos] = useState(()=>{ try{return JSON.parse(localStorage.getItem('dl_todos_react')||'[]')}catch(e){return []} }); useEffect(()=>{ localStorage.setItem('dl_todos_react', JSON.stringify(todos)) },[todos]);
-
-// recipe const recipes = { egg_rice: 'Nasi goreng: tumis bawang, masukkan nasi, kecap, dan telur. Sajikan hangat.', pasta_tomato: 'Pasta saus tomat: tumis bawang & tomat, campur pasta matang, taburi keju.', bread_avocado: 'Roti alpukat: lumatkan alpukat, beri garam, merica, perasan jeruk.' }; const [recipeKey, setRecipeKey] = useState('egg_rice');
-
-// simple search mock const [search, setSearch] = useState(''); const searchResults = useMemo(()=>{ const q = search.toLowerCase().trim(); if(!q) return []; const res = []; if(/nasi|telur|resep/.test(q)) res.push('Nasi goreng telur — cepat & hemat.'); if(/pomodoro|tips/.test(q)) res.push('Pomodoro: 25 menit kerja + 5 menit istirahat.'); if(/todo|tugas/.test(q)) res.push('Tambahkan tugas di panel To-Do.'); return res; },[search]);
-
-// weather (demo only) const [weather, setWeather] = useState('28°C • Cerah');
-
-// export PDF (using html2pdf which you must import in index.html or via dynamic import) const exportPdf = async () => { // attempt dynamic import of html2pdf if available globally try{ const { default: html2pdf } = await import('html2pdf.js'); const element = document.getElementById('appRoot'); html2pdf().from(element).set({ filename: 'DailyLifeHub.pdf', jsPDF: { unit: 'in', format: 'a4' } }).save(); }catch(e){ alert('Export PDF gagal. Pastikan html2pdf.js terpasang (lihat README di komentar).'); } }
-
-return ( <div id="appRoot" className={${isDark? 'bg-gradient-to-b from-[#0b1020] to-[#061022] text-white' : 'bg-white text-slate-900'} min-h-screen p-6}> <div className="max-w-6xl mx-auto"> {/* Header */} <header className="flex items-center justify-between mb-6"> <div className="flex items-center gap-4"> <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-amber-400 flex items-center justify-center shadow-2xl text-xl font-extrabold text-white">DL</div> <div> <h1 className="text-2xl font-bold leading-tight">DailyLife Hub</h1> <p className="text-sm opacity-80">Colorful • Energetic • Fast</p> </div> </div>
-
-<div className="flex items-center gap-3">
-        <div className="text-sm opacity-80 mr-2">{time}</div>
-        <button onClick={()=>setIsDark(v=>!v)} className="p-2 rounded-lg bg-white/6 hover:bg-white/10 transition">
-          {isDark? <Sun size={18} /> : <Moon size={18} />}
-        </button>
-        <button onClick={exportPdf} className="p-2 rounded-lg bg-white/6 hover:bg-white/10 transition"><Download size={18} /></button>
+      <div class="controls">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input id="q" placeholder="Cari (mis. alam, minimal)" />
+        </div>
+        <select id="filter" class="select">
+          <option value="all">Semua kategori</option>
+        </select>
+        <button id="randomBtn" class="btn">Acak</button>
       </div>
     </header>
 
-    <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* left: hero + small widgets */}
-      <section className="lg:col-span-2 space-y-6">
-        <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} transition={{duration:0.4}} className="rounded-2xl p-6 bg-gradient-to-bl from-rose-500/10 via-indigo-500/6 to-amber-400/6 backdrop-blur border border-white/5">
-          <div className="flex items-start gap-6">
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold">Hai — Temukan energi baru untuk harimu ✨</h2>
-              <p className="mt-2 opacity-80">DailyLife Hub membantu kamu merapikan hari: To‑do, tips cepat, resep, dan sedikit motivasi.</p>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div className="p-3 rounded-xl bg-white/6">
-                  <h3 className="font-semibold">Quote Harian</h3>
-                  <p className="mt-2 text-sm opacity-90">{quote}</p>
-                  <div className="mt-3 text-right"><button onClick={()=>setQuote(pick(quotes))} className="text-sm px-3 py-1 rounded-lg bg-gradient-to-r from-pink-500 to-yellow-400 text-white">Baru</button></div>
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/6">
-                  <h3 className="font-semibold">Tip Cepat</h3>
-                  <p className="mt-2 text-sm opacity-90">{tip}</p>
-                  <div className="mt-3 text-right"><button onClick={()=>setTip(pick(tips))} className="text-sm px-3 py-1 rounded-lg bg-gradient-to-r from-green-400 to-teal-400 text-white">Selanjutnya</button></div>
-                </div>
-
-                <div className="p-3 rounded-xl bg-white/6">
-                  <h3 className="font-semibold">Resep Kilat</h3>
-                  <select value={recipeKey} onChange={e=>setRecipeKey(e.target.value)} className="mt-2 w-full rounded-md p-2 bg-white/5">
-                    <option value="egg_rice">Nasi + Telur</option>
-                    <option value="pasta_tomato">Pasta + Tomat</option>
-                    <option value="bread_avocado">Roti + Alpukat</option>
-                  </select>
-                  <p className="mt-2 text-sm opacity-90">{recipes[recipeKey]}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-44 hidden md:block">
-              {/* Illustration card */}
-              <div className="rounded-xl p-3 bg-white/5 h-full flex flex-col items-center justify-center">
-                <div className="w-28 h-28 rounded-lg bg-gradient-to-br from-pink-300 to-yellow-200 flex items-center justify-center text-2xl font-bold text-white shadow-lg">🌈</div>
-                <p className="mt-3 text-sm opacity-90 text-center">Energi warna untuk semangat harianmu</p>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ToDo card */}
-        <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} transition={{duration:0.45}} className="rounded-2xl p-4 bg-white/4 border border-white/6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold flex items-center gap-2"><CheckSquare size={18}/> To-Do Harian</h3>
-            <small className="opacity-70">Sinkron: local</small>
-          </div>
-          <TodoList todos={todos} setTodos={setTodos} />
-        </motion.div>
-
-      </section>
-
-      {/* right column */}
-      <aside className="space-y-6">
-        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
-          <h4 className="font-semibold">Cari Cepat</h4>
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Cari resep, tips, atau todo..." className="mt-3 p-2 rounded-md w-full bg-transparent border border-white/6" />
-          <div className="mt-3 text-sm opacity-80">
-            {searchResults.length? searchResults.map((r,i)=> <div key={i} className="py-1">• {r}</div>) : (search? <div>Tidak ada hasil</div> : <div>Mulai ketik untuk mencari</div>)}
-          </div>
-        </div>
-
-        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
-          <div className="flex items-center justify-between">
-            <h4 className="font-semibold">Cuaca (Demo)</h4>
-            <div className="text-sm opacity-80 flex items-center gap-2"><CloudRain size={14}/> {weather}</div>
-          </div>
-          <p className="mt-3 text-sm opacity-80">Untuk data nyata, integrasikan OpenWeather API (opsional).</p>
-        </div>
-
-        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
-          <h4 className="font-semibold">Kebiasaan</h4>
-          <HabitTracker />
-        </div>
-
-      </aside>
+    <main>
+      <section id="gallery" class="grid"></section>
+      <p id="empty" style="display:none;color:var(--muted);text-align:center;margin-top:18px">Tidak ditemukan hasil.</p>
     </main>
 
-    <footer className="mt-10 text-center opacity-80">Buka project ini sebagai React + Tailwind. Sesuaikan warna & animasi lebih lanjut.</footer>
+    <footer>© <span id="year"></span> Wallpaper Gallery — Buat sesuai selera</footer>
   </div>
-</div>
 
-); }
+  <div id="modal" class="modal">
+    <div class="modal-card">
+      <div class="modal-left">
+        <img id="modalImg" alt="preview wallpaper" src="" />
+      </div>
+      <div class="modal-right">
+        <h3 id="modalTitle"></h3>
+        <p class="small" id="modalMeta"></p>
+        <div class="modal-actions">
+          <a id="downloadLink" class="btn" download>Unduh</a>
+          <button id="closeBtn" class="select">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-function TodoList({todos, setTodos}){ const [text, setText] = useState(''); const add = () => { if(!text.trim()) return; setTodos(prev=>[...prev, {text:text.trim(), done:false}]); setText(''); } const toggle = i => setTodos(prev=> prev.map((t,idx)=> idx===i? {...t, done:!t.done}: t)); const remove = i => setTodos(prev=> prev.filter((_,idx)=> idx!==i)); return ( <div className="mt-3"> <div className="flex gap-2"> <input value={text} onChange={e=>setText(e.target.value)} className="flex-1 p-2 rounded-md bg-transparent border border-white/6" placeholder="Tambahkan tugas..." /> <button onClick={add} className="px-3 py-1 rounded-md bg-gradient-to-r from-pink-500 to-yellow-400 text-white">Tambah</button> </div> <div className="mt-3 space-y-2"> {todos.length===0? <div className="text-sm opacity-70">Belum ada tugas</div> : todos.map((t,i)=> ( <div key={i} className={flex items-center gap-3 p-2 rounded-md ${t.done? 'opacity-60 line-through':''} bg-white/3}> <input type="checkbox" checked={t.done} onChange={()=>toggle(i)} /> <div className="flex-1">{t.text}</div> <button className="text-sm opacity-80" onClick={()=>remove(i)}>Hapus</button> </div> ))} </div> </div> ) }
+  <script>
+    const WALLPAPERS = [
+      {id:1,title:'Sunset on Mountains',category:'Alam',src:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80'},
+      {id:2,title:'Misty Forest',category:'Alam',src:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80'},
+      {id:3,title:'Minimal Shapes',category:'Minimal',src:'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=1600&q=80'},
+      {id:4,title:'Night City Lights',category:'Kota',src:'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&q=80'},
+      {id:5,title:'Abstract Waves',category:'Abstrak',src:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=80'},
+      {id:6,title:'Aurora Sky',category:'Langit',src:'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80'},
+    ];
 
-function HabitTracker(){ const keys = ['water','exercise','read']; const [state, setState] = useState(()=>{ try{ return keys.reduce((acc,k)=>{ acc[k]= localStorage.getItem('habit_'+k) === '1'; return acc },{}); }catch(e){ return {water:false,exercise:false,read:false} } }); useEffect(()=>{ keys.forEach(k=> localStorage.setItem('habit_'+k, state[k]? '1':'0')); },[state]); return ( <div className="mt-2 space-y-2"> <label className="flex items-center gap-2"><input type="checkbox" checked={state.water} onChange={()=>setState(s=>({...s, water:!s.water}))} /> Minum 8 gelas</label> <label className="flex items-center gap-2"><input type="checkbox" checked={state.exercise} onChange={()=>setState(s=>({...s, exercise:!s.exercise}))} /> Olahraga 20 menit</label> <label className="flex items-center gap-2"><input type="checkbox" checked={state.read} onChange={()=>setState(s=>({...s, read:!s.read}))} /> Baca 30 menit</label> </div> ) }
+    const gallery = document.getElementById('gallery');
+    const q = document.getElementById('q');
+    const filter = document.getElementById('filter');
+    const empty = document.getElementById('empty');
+    const year = document.getElementById('year');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const downloadLink = document.getElementById('downloadLink');
+    const closeBtn = document.getElementById('closeBtn');
+
+    year.textContent = new Date().getFullYear();
+
+    const categories = [...new Set(WALLPAPERS.map(w=>w.category))];
+    categories.forEach(c=>{
+      const opt=document.createElement('option');
+      opt.value=c; opt.textContent=c;
+      filter.appendChild(opt);
+    });
+
+    function render(list){
+      gallery.innerHTML='';
+      if(!list.length){ empty.style.display='block'; return } else empty.style.display='none';
+      list.forEach(w=>{
+        const el=document.createElement('div');
+        el.className='card';
+        el.innerHTML=`
+          <img data-src="${w.src}" alt="${w.title}" loading="lazy" />
+          <div class="meta">
+            <div><div class="title">${w.title}</div><div class="tag">${w.category}</div></div>
+            <div><button class="select" data-id="${w.id}">Lihat</button></div>
+          </div>`;
+        gallery.appendChild(el);
+      });
+      lazyLoadImages();
+      document.querySelectorAll('.select[data-id]').forEach(btn=>{
+        btn.addEventListener('click',e=>{
+          const id=+e.currentTarget.dataset.id;
+          openModal(WALLPAPERS.find(x=>x.id===id));
+        });
+      });
+    }
+
+    function lazyLoadImages(){
+      const imgs=document.querySelectorAll('img[data-src]');
+      if('IntersectionObserver' in window){
+        const io=new IntersectionObserver((entries,obs)=>{
+          entries.forEach(en=>{
+            if(en.isIntersecting){
+              const img=en.target; img.src=img.dataset.src;
+              img.removeAttribute('data-src'); obs.unobserve(img);
+            }
+          })
+        },{rootMargin:'200px'});
+        imgs.forEach(i=>io.observe(i));
+      } else imgs.forEach(i=>{i.src=i.dataset.src;i.removeAttribute('data-src');});
+    }
+
+    function openModal(item){
+      if(!item) return;
+      modalImg.src=item.src;
+      modalTitle.textContent=item.title;
+      modalMeta.textContent=`Kategori: ${item.category}`;
+      downloadLink.href=item.src;
+      modal.classList.add('open');
+    }
+    function closeModal(){
+      modal.classList.remove('open'); modalImg.src='';
+    }
+
+    function applyFilters(){
+      const qv=q.value.trim().toLowerCase();
+      const cat=filter.value;
+      const res=WALLPAPERS.filter(w=>{
+        const matchQ=!qv || w.title.toLowerCase().includes(qv) || w.category.toLowerCase().includes(qv);
+        const matchC=cat==='all' || w.category===cat;
+        return matchQ && matchC;
+      });
+      render(res);
+    }
+
+    function shuffleAndShow(){
+      const arr=[...WALLPAPERS];
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      render(arr);
+    }
+
+    q.addEventListener('input',applyFilters);
+    filter.addEventListener('change',applyFilters);
+    document.getElementById('randomBtn').addEventListener('click',shuffleAndShow);
+    closeBtn.addEventListener('click',closeModal);
+    modal.addEventListener('click',e=>{if(e.target===modal) closeModal();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') closeModal();});
+
+    render(WALLPAPERS);
+  </script>
+</body>
+        </html>
