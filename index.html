@@ -1,315 +1,148 @@
-<!doctype html>
+/* DailyLife Hub — React + Tailwind (Colorful & Energetic)
 
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DailyLife Hub — Kehidupan Sehari-hari</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg: #0f172a;
-      --card: #0b1220;
-      --muted: #94a3b8;
-      --accent1: #7c3aed; /* purple */
-      --accent2: #06b6d4; /* teal */
-      --glass: rgba(255,255,255,0.04);
-      --glass-2: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background: linear-gradient(180deg,#071023 0%, #071229 50%, #021025 100%);
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding:28px;
-      display:flex;
-      justify-content:center;
-    }
-    .wrap{width:100%;max-width:1100px}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(12,17,30,0.6)}
-    .brand h1{margin:0;font-size:18px}
-    .brand p{margin:0;font-size:12px;color:var(--muted)}
-    .controls{display:flex;gap:12px;align-items:center}
-    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:8px 12px;border-radius:10px;cursor:pointer;color:inherit}
-    .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}/* hero card */
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-.hero{display:flex;gap:18px;align-items:center}
-.hero-left{flex:1}
-.hero h2{margin:0 0 8px 0;font-size:20px}
-.hero p{margin:0;color:var(--muted)}
+How to use:
 
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+1. Create a React app (Vite recommended): npm create vite@latest dailylifehub -- --template react cd dailylifehub
 
-/* widgets */
-.widget{padding:12px;border-radius:12px;background:linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.02)}
-.widget h3{margin:0 0 8px 0;font-size:14px}
-.muted{color:var(--muted);font-size:13px}
 
-/* todo list */
-.todo-list{display:flex;flex-direction:column;gap:8px}
-.todo-item{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:var(--glass-2)}
-.todo-item.completed{opacity:0.6;text-decoration:line-through}
-.todo-actions{margin-left:auto;display:flex;gap:8px}
+2. Install dependencies: npm install npm install -D tailwindcss postcss autoprefixer npx tailwindcss init -p npm install framer-motion lucide-react html2pdf.js (optional) npm install @shadcn/ui
 
-/* tips */
-.tip{font-size:14px;line-height:1.4}
 
-/* right column */
-.right{display:flex;flex-direction:column;gap:12px}
-.small{font-size:13px}
+3. Configure Tailwind (tailwind.config.cjs): module.exports = { content: ['./index.html','./src/**/*.{js,jsx,ts,tsx}'], theme: { extend: {} }, plugins: [], }
 
-.search{display:flex;gap:8px}
-input[type=text]{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
 
-footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+4. Add Tailwind directives to src/index.css: @tailwind base; @tailwind components; @tailwind utilities;
 
-/* responsive */
-@media (max-width:880px){
-  .layout{grid-template-columns:1fr}
-  .grid{grid-template-columns:1fr}
-  header{flex-direction:column;align-items:flex-start;gap:12px}
-}
 
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="logo">DL</div>
-        <div>
-          <h1>DailyLife Hub</h1>
-          <p>Inspirasi, tugas harian, & tips singkat</p>
-        </div>
+5. Replace src/App.jsx with the component below. Run: npm run dev
+
+
+
+Notes:
+
+This is a single-component demo focused on UX and Tailwind styling.
+
+You can split into smaller components (Header, Todo, Widgets) after verifying layout. */
+
+
+import React, { useEffect, useMemo, useState } from 'react'; import { motion } from 'framer-motion'; import { Sun, Moon, Download, CloudRain, CheckSquare } from 'lucide-react';
+
+export default function App() { // theme const [isDark, setIsDark] = useState(true);
+
+// clock const [time, setTime] = useState(''); useEffect(() => { const t = () => { const d = new Date(); setTime(${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}); }; t(); const id = setInterval(t, 1000); return () => clearInterval(id); }, []);
+
+// quotes & tips const quotes = useMemo(()=>[ 'Kerjakan yang kamu bisa hari ini — langkah kecil tetap berarti.', 'Konsistensi mengalahkan intensitas yang sesekali.', 'Jeda 2 menit: tarik napas, fokus lagi.', 'Selesaikan tugas paling penting pagi ini.' ],[]); const tips = useMemo(()=>[ 'Buat 3 prioritas utama setiap pagi.', 'Siapkan pakaian dan tas malam sebelumnya.', 'Pomodoro: 25 menit fokus + 5 menit istirahat.', 'Minum segelas air setelah bangun.' ],[]);
+
+const pick = arr => arr[Math.floor(Math.random()*arr.length)]; const [quote, setQuote] = useState(pick(quotes)); const [tip, setTip] = useState(pick(tips));
+
+// todos const [todos, setTodos] = useState(()=>{ try{return JSON.parse(localStorage.getItem('dl_todos_react')||'[]')}catch(e){return []} }); useEffect(()=>{ localStorage.setItem('dl_todos_react', JSON.stringify(todos)) },[todos]);
+
+// recipe const recipes = { egg_rice: 'Nasi goreng: tumis bawang, masukkan nasi, kecap, dan telur. Sajikan hangat.', pasta_tomato: 'Pasta saus tomat: tumis bawang & tomat, campur pasta matang, taburi keju.', bread_avocado: 'Roti alpukat: lumatkan alpukat, beri garam, merica, perasan jeruk.' }; const [recipeKey, setRecipeKey] = useState('egg_rice');
+
+// simple search mock const [search, setSearch] = useState(''); const searchResults = useMemo(()=>{ const q = search.toLowerCase().trim(); if(!q) return []; const res = []; if(/nasi|telur|resep/.test(q)) res.push('Nasi goreng telur — cepat & hemat.'); if(/pomodoro|tips/.test(q)) res.push('Pomodoro: 25 menit kerja + 5 menit istirahat.'); if(/todo|tugas/.test(q)) res.push('Tambahkan tugas di panel To-Do.'); return res; },[search]);
+
+// weather (demo only) const [weather, setWeather] = useState('28°C • Cerah');
+
+// export PDF (using html2pdf which you must import in index.html or via dynamic import) const exportPdf = async () => { // attempt dynamic import of html2pdf if available globally try{ const { default: html2pdf } = await import('html2pdf.js'); const element = document.getElementById('appRoot'); html2pdf().from(element).set({ filename: 'DailyLifeHub.pdf', jsPDF: { unit: 'in', format: 'a4' } }).save(); }catch(e){ alert('Export PDF gagal. Pastikan html2pdf.js terpasang (lihat README di komentar).'); } }
+
+return ( <div id="appRoot" className={${isDark? 'bg-gradient-to-b from-[#0b1020] to-[#061022] text-white' : 'bg-white text-slate-900'} min-h-screen p-6}> <div className="max-w-6xl mx-auto"> {/* Header */} <header className="flex items-center justify-between mb-6"> <div className="flex items-center gap-4"> <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-amber-400 flex items-center justify-center shadow-2xl text-xl font-extrabold text-white">DL</div> <div> <h1 className="text-2xl font-bold leading-tight">DailyLife Hub</h1> <p className="text-sm opacity-80">Colorful • Energetic • Fast</p> </div> </div>
+
+<div className="flex items-center gap-3">
+        <div className="text-sm opacity-80 mr-2">{time}</div>
+        <button onClick={()=>setIsDark(v=>!v)} className="p-2 rounded-lg bg-white/6 hover:bg-white/10 transition">
+          {isDark? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+        <button onClick={exportPdf} className="p-2 rounded-lg bg-white/6 hover:bg-white/10 transition"><Download size={18} /></button>
       </div>
-      <div class="controls">
-        <div id="time" class="muted small">--:--</div>
-        <button class="btn" id="themeToggle">Toggle Theme</button>
-      </div>
-    </header><div class="layout">
-  <main>
-    <section class="card hero">
-      <div class="hero-left">
-        <h2>Selamat datang! 🌤️</h2>
-        <p>DailyLife Hub membantu menyusun hari, menyimpan to‑do, dan memberi ide cepat untuk keseharian.</p>
+    </header>
 
-        <div class="grid">
-          <div class="widget">
-            <h3>Quote Harian</h3>
-            <div id="quote" class="muted">Memuat...</div>
-            <div style="margin-top:8px;text-align:right">
-              <button class="btn" id="newQuote">Dapatkan Quote Baru</button>
+    <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* left: hero + small widgets */}
+      <section className="lg:col-span-2 space-y-6">
+        <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} transition={{duration:0.4}} className="rounded-2xl p-6 bg-gradient-to-bl from-rose-500/10 via-indigo-500/6 to-amber-400/6 backdrop-blur border border-white/5">
+          <div className="flex items-start gap-6">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold">Hai — Temukan energi baru untuk harimu ✨</h2>
+              <p className="mt-2 opacity-80">DailyLife Hub membantu kamu merapikan hari: To‑do, tips cepat, resep, dan sedikit motivasi.</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div className="p-3 rounded-xl bg-white/6">
+                  <h3 className="font-semibold">Quote Harian</h3>
+                  <p className="mt-2 text-sm opacity-90">{quote}</p>
+                  <div className="mt-3 text-right"><button onClick={()=>setQuote(pick(quotes))} className="text-sm px-3 py-1 rounded-lg bg-gradient-to-r from-pink-500 to-yellow-400 text-white">Baru</button></div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white/6">
+                  <h3 className="font-semibold">Tip Cepat</h3>
+                  <p className="mt-2 text-sm opacity-90">{tip}</p>
+                  <div className="mt-3 text-right"><button onClick={()=>setTip(pick(tips))} className="text-sm px-3 py-1 rounded-lg bg-gradient-to-r from-green-400 to-teal-400 text-white">Selanjutnya</button></div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-white/6">
+                  <h3 className="font-semibold">Resep Kilat</h3>
+                  <select value={recipeKey} onChange={e=>setRecipeKey(e.target.value)} className="mt-2 w-full rounded-md p-2 bg-white/5">
+                    <option value="egg_rice">Nasi + Telur</option>
+                    <option value="pasta_tomato">Pasta + Tomat</option>
+                    <option value="bread_avocado">Roti + Alpukat</option>
+                  </select>
+                  <p className="mt-2 text-sm opacity-90">{recipes[recipeKey]}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-44 hidden md:block">
+              {/* Illustration card */}
+              <div className="rounded-xl p-3 bg-white/5 h-full flex flex-col items-center justify-center">
+                <div className="w-28 h-28 rounded-lg bg-gradient-to-br from-pink-300 to-yellow-200 flex items-center justify-center text-2xl font-bold text-white shadow-lg">🌈</div>
+                <p className="mt-3 text-sm opacity-90 text-center">Energi warna untuk semangat harianmu</p>
+              </div>
             </div>
           </div>
+        </motion.div>
 
-          <div class="widget">
-            <h3>Tip Cepat</h3>
-            <div id="tip" class="tip">Memuat tips...</div>
-            <div style="margin-top:8px;text-align:right">
-              <button class="btn" id="nextTip">Selanjutnya</button>
-            </div>
+        {/* ToDo card */}
+        <motion.div initial={{opacity:0, y:8}} animate={{opacity:1, y:0}} transition={{duration:0.45}} className="rounded-2xl p-4 bg-white/4 border border-white/6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold flex items-center gap-2"><CheckSquare size={18}/> To-Do Harian</h3>
+            <small className="opacity-70">Sinkron: local</small>
           </div>
+          <TodoList todos={todos} setTodos={setTodos} />
+        </motion.div>
 
-          <div class="widget">
-            <h3>Resep Sederhana</h3>
-            <div id="recipe" class="muted">Pilih bahan di bawah lalu lihat resep cepat.</div>
-            <div style="margin-top:8px">
-              <select id="ingredientsSelect" class="btn" style="min-width:100%">
-                <option value="egg_rice">Nasi + Telur</option>
-                <option value="pasta_tomato">Pasta + Tomat</option>
-                <option value="bread_avocado">Roti + Alpukat</option>
-              </select>
-            </div>
-          </div>
+      </section>
 
-          <div class="widget">
-            <h3>Cuaca Lokal (dummy)</h3>
-            <div class="muted">Anda bisa menghubungkan API cuaca di versi lanjutan.</div>
-            <div style="margin-top:8px"><strong id="fakeWeather">28°C • Cerah</strong></div>
+      {/* right column */}
+      <aside className="space-y-6">
+        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
+          <h4 className="font-semibold">Cari Cepat</h4>
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Cari resep, tips, atau todo..." className="mt-3 p-2 rounded-md w-full bg-transparent border border-white/6" />
+          <div className="mt-3 text-sm opacity-80">
+            {searchResults.length? searchResults.map((r,i)=> <div key={i} className="py-1">• {r}</div>) : (search? <div>Tidak ada hasil</div> : <div>Mulai ketik untuk mencari</div>)}
           </div>
         </div>
-      </div>
 
-      <div style="width:260px;text-align:center">
-        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><rect rx='30' width='100%' height='100%' fill='%230d1220'/><text x='50%' y='52%' fill='%23fff' font-size='20' font-family='Inter' text-anchor='middle'>DailyLife</text></svg>" alt="illustration" style="width:100%;border-radius:12px;"/>
-      </div>
-    </section>
+        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold">Cuaca (Demo)</h4>
+            <div className="text-sm opacity-80 flex items-center gap-2"><CloudRain size={14}/> {weather}</div>
+          </div>
+          <p className="mt-3 text-sm opacity-80">Untuk data nyata, integrasikan OpenWeather API (opsional).</p>
+        </div>
 
-    <section style="margin-top:16px" class="card">
-      <h3 style="margin-top:0">To‑Do Harian</h3>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input id="todoInput" placeholder="Tambahkan tugas..." type="text" />
-        <button class="btn" id="addTodo">Tambah</button>
-      </div>
-      <div id="todoList" class="todo-list"></div>
-      <div style="margin-top:10px;color:var(--muted);font-size:13px">Tugas disimpan di browser (localStorage).</div>
-    </section>
+        <div className="rounded-2xl p-4 bg-white/4 border border-white/6">
+          <h4 className="font-semibold">Kebiasaan</h4>
+          <HabitTracker />
+        </div>
 
-  </main>
+      </aside>
+    </main>
 
-  <aside class="right">
-    <div class="card widget">
-      <h3>Search Cepat</h3>
-      <div class="search">
-        <input id="quickSearch" placeholder="Cari resep, tips, atau item..." type="text" />
-        <button class="btn" id="doSearch">Cari</button>
-      </div>
-      <div id="searchResults" style="margin-top:10px;color:var(--muted);font-size:13px"></div>
-    </div>
-
-    <div class="card widget">
-      <h3>Tracker Kebiasaan Singkat</h3>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-        <label><input type="checkbox" id="habitWater"/> Minum 8 gelas</label>
-        <label><input type="checkbox" id="habitExercise"/> Olahraga 20 menit</label>
-        <label><input type="checkbox" id="habitRead"/> Baca 30 menit</label>
-      </div>
-    </div>
-
-    <div class="card widget">
-      <h3>Quick Links</h3>
-      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
-        <a class="btn" href="#">Belanja</a>
-        <a class="btn" href="#">Resep Favorit</a>
-        <a class="btn" href="#">Catatan</a>
-      </div>
-    </div>
-
-  </aside>
+    <footer className="mt-10 text-center opacity-80">Buka project ini sebagai React + Tailwind. Sesuaikan warna & animasi lebih lanjut.</footer>
+  </div>
 </div>
 
-<footer>
-  Dibuat dengan ❤️ — buka file ini sebagai <strong>index.html</strong> di browser Anda.
-</footer>
+); }
 
-  </div>  <script>
-    // Simple client-side app (no external libs). Keep variables small and readable.
-    const quotes = [
-      "Kerjakan yang kamu bisa hari ini, esok akan lebih baik.",
-      "Hal kecil yang konsisten menghasilkan perubahan besar.",
-      "Jeda sebentar. Tarik napas. Lanjutkan.",
-      "Produktivitas bukan tentang melakukan lebih banyak, tapi tentang melakukan yang penting."
-    ];
+function TodoList({todos, setTodos}){ const [text, setText] = useState(''); const add = () => { if(!text.trim()) return; setTodos(prev=>[...prev, {text:text.trim(), done:false}]); setText(''); } const toggle = i => setTodos(prev=> prev.map((t,idx)=> idx===i? {...t, done:!t.done}: t)); const remove = i => setTodos(prev=> prev.filter((_,idx)=> idx!==i)); return ( <div className="mt-3"> <div className="flex gap-2"> <input value={text} onChange={e=>setText(e.target.value)} className="flex-1 p-2 rounded-md bg-transparent border border-white/6" placeholder="Tambahkan tugas..." /> <button onClick={add} className="px-3 py-1 rounded-md bg-gradient-to-r from-pink-500 to-yellow-400 text-white">Tambah</button> </div> <div className="mt-3 space-y-2"> {todos.length===0? <div className="text-sm opacity-70">Belum ada tugas</div> : todos.map((t,i)=> ( <div key={i} className={flex items-center gap-3 p-2 rounded-md ${t.done? 'opacity-60 line-through':''} bg-white/3}> <input type="checkbox" checked={t.done} onChange={()=>toggle(i)} /> <div className="flex-1">{t.text}</div> <button className="text-sm opacity-80" onClick={()=>remove(i)}>Hapus</button> </div> ))} </div> </div> ) }
 
-    const tips = [
-      "Rapikan meja Anda 5 menit setiap pagi — fokus sering ikut.",
-      "Siapkan pakaian dan tas kerja di malam sebelumnya.",
-      "Gunakan timer 25 menit (Pomodoro) untuk tugas panjang.",
-      "Minum segelas air saat bangun untuk mulai terhidrasi.",
-    ];
-
-    const recipes = {
-      egg_rice: "Nasi goreng telur simpel: tumis bawang, masukkan nasi, kecap, dan telur. Sajikan hangat.",
-      pasta_tomato: "Pasta saus tomat: masak pasta, tumis bawang dan tomat, tumbuk sedikit, campur pasta. Taburi keju.",
-      bread_avocado: "Roti alpukat: oles alpukat, tambahkan garam, merica, dan perasan jeruk nipis."
-    };
-
-    // DOM refs
-    const quoteEl = document.getElementById('quote');
-    const tipEl = document.getElementById('tip');
-    const recipeEl = document.getElementById('recipe');
-    const ingredientsSelect = document.getElementById('ingredientsSelect');
-    const fakeWeather = document.getElementById('fakeWeather');
-    const timeEl = document.getElementById('time');
-
-    // init
-    function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
-    function renderQuote(){quoteEl.textContent = '"' + pick(quotes) + '"'}
-    function renderTip(){tipEl.textContent = pick(tips)}
-
-    document.getElementById('newQuote').addEventListener('click', renderQuote);
-    document.getElementById('nextTip').addEventListener('click', renderTip);
-    ingredientsSelect.addEventListener('change', ()=>{
-      recipeEl.textContent = recipes[ingredientsSelect.value];
-    });
-
-    // theme toggle (simple)
-    const themeBtn = document.getElementById('themeToggle');
-    themeBtn.addEventListener('click', ()=>{
-      document.body.classList.toggle('light-theme');
-      if(document.body.classList.contains('light-theme')){
-        document.body.style.background = 'linear-gradient(180deg,#f7fbff,#eef6fb)';
-        document.body.style.color = '#0b1220';
-      } else {
-        document.body.style.background = 'linear-gradient(180deg,#071023 0%, #071229 50%, #021025 100%)';
-        document.body.style.color = '#e6eef8';
-      }
-    });
-
-    // Quick clock
-    function updateClock(){
-      const d=new Date();
-      const hh=String(d.getHours()).padStart(2,'0');
-      const mm=String(d.getMinutes()).padStart(2,'0');
-      timeEl.textContent = hh+':'+mm;
-    }
-    setInterval(updateClock,1000); updateClock();
-
-    // fake weather cycling (demo)
-    const weatherStates = ['28°C • Cerah','26°C • Berawan','30°C • Panas','24°C • Hujan ringan'];
-    setInterval(()=>{fakeWeather.textContent = pick(weatherStates)},7000);
-
-    // --- ToDo persistence ---
-    const todoInput = document.getElementById('todoInput');
-    const addTodoBtn = document.getElementById('addTodo');
-    const todoListEl = document.getElementById('todoList');
-    let todos = JSON.parse(localStorage.getItem('dl_todos')||'[]');
-
-    function saveTodos(){localStorage.setItem('dl_todos', JSON.stringify(todos));}
-    function renderTodos(){
-      todoListEl.innerHTML = '';
-      todos.forEach((t, i)=>{
-        const item = document.createElement('div');
-        item.className = 'todo-item'+(t.done? ' completed':'');
-        item.innerHTML = `
-          <input type="checkbox" ${t.done? 'checked':''} />
-          <div>${escapeHtml(t.text)}</div>
-          <div class="todo-actions">
-            <button class="btn btn-sm" data-action="del" data-i="${i}">Hapus</button>
-          </div>
-        `;
-        const chk = item.querySelector('input[type=checkbox]');
-        chk.addEventListener('change',()=>{todos[i].done = chk.checked; saveTodos(); renderTodos();});
-        item.querySelector('[data-action=del]').addEventListener('click',()=>{todos.splice(i,1); saveTodos(); renderTodos();});
-        todoListEl.appendChild(item);
-      });
-    }
-
-    addTodoBtn.addEventListener('click', ()=>{
-      const v = todoInput.value.trim();
-      if(!v) return alert('Isi tugas dulu');
-      todos.push({text:v, done:false});
-      todoInput.value=''; saveTodos(); renderTodos();
-    });
-
-    // Quick search (client-side mock)
-    document.getElementById('doSearch').addEventListener('click', ()=>{
-      const q = document.getElementById('quickSearch').value.toLowerCase();
-      const res = [];
-      if(q.includes('resep')||q.includes('nasi')||q.includes('telur')) res.push('Coba "Nasi goreng telur" — cepat dan hemat.');
-      if(q.includes('tips')||q.includes('pomodoro')) res.push('Gunakan teknik Pomodoro: 25 menit kerja + 5 menit istirahat.');
-      if(q.includes('tugas')||q.includes('todo')) res.push('Tambahkan tugas di panel To‑Do di kiri.');
-      document.getElementById('searchResults').textContent = res.length? res.join('\n') : 'Tidak ada hasil, coba kata kunci lain.';
-    });
-
-    // simple habit persistence
-    ['habitWater','habitExercise','habitRead'].forEach(id=>{
-      const el = document.getElementById(id);
-      el.checked = localStorage.getItem(id)==='1';
-      el.addEventListener('change', ()=>{localStorage.setItem(id, el.checked? '1':'0')});
-    });
-
-    // utilities
-    function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-    // initial renders
-    renderQuote(); renderTip(); recipeEl.textContent = recipes[ingredientsSelect.value]; renderTodos();
-
-  </script></body>
-  </html>
+function HabitTracker(){ const keys = ['water','exercise','read']; const [state, setState] = useState(()=>{ try{ return keys.reduce((acc,k)=>{ acc[k]= localStorage.getItem('habit_'+k) === '1'; return acc },{}); }catch(e){ return {water:false,exercise:false,read:false} } }); useEffect(()=>{ keys.forEach(k=> localStorage.setItem('habit_'+k, state[k]? '1':'0')); },[state]); return ( <div className="mt-2 space-y-2"> <label className="flex items-center gap-2"><input type="checkbox" checked={state.water} onChange={()=>setState(s=>({...s, water:!s.water}))} /> Minum 8 gelas</label> <label className="flex items-center gap-2"><input type="checkbox" checked={state.exercise} onChange={()=>setState(s=>({...s, exercise:!s.exercise}))} /> Olahraga 20 menit</label> <label className="flex items-center gap-2"><input type="checkbox" checked={state.read} onChange={()=>setState(s=>({...s, read:!s.read}))} /> Baca 30 menit</label> </div> ) }
