@@ -1,0 +1,315 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DailyLife Hub — Kehidupan Sehari-hari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0f172a;
+      --card: #0b1220;
+      --muted: #94a3b8;
+      --accent1: #7c3aed; /* purple */
+      --accent2: #06b6d4; /* teal */
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,#071023 0%, #071229 50%, #021025 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{width:100%;max-width:1100px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(12,17,30,0.6)}
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+    .controls{display:flex;gap:12px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:8px 12px;border-radius:10px;cursor:pointer;color:inherit}
+    .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}/* hero card */
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+.hero{display:flex;gap:18px;align-items:center}
+.hero-left{flex:1}
+.hero h2{margin:0 0 8px 0;font-size:20px}
+.hero p{margin:0;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+
+/* widgets */
+.widget{padding:12px;border-radius:12px;background:linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.02)}
+.widget h3{margin:0 0 8px 0;font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+
+/* todo list */
+.todo-list{display:flex;flex-direction:column;gap:8px}
+.todo-item{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;background:var(--glass-2)}
+.todo-item.completed{opacity:0.6;text-decoration:line-through}
+.todo-actions{margin-left:auto;display:flex;gap:8px}
+
+/* tips */
+.tip{font-size:14px;line-height:1.4}
+
+/* right column */
+.right{display:flex;flex-direction:column;gap:12px}
+.small{font-size:13px}
+
+.search{display:flex;gap:8px}
+input[type=text]{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+
+/* responsive */
+@media (max-width:880px){
+  .layout{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  header{flex-direction:column;align-items:flex-start;gap:12px}
+}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">DL</div>
+        <div>
+          <h1>DailyLife Hub</h1>
+          <p>Inspirasi, tugas harian, & tips singkat</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div id="time" class="muted small">--:--</div>
+        <button class="btn" id="themeToggle">Toggle Theme</button>
+      </div>
+    </header><div class="layout">
+  <main>
+    <section class="card hero">
+      <div class="hero-left">
+        <h2>Selamat datang! 🌤️</h2>
+        <p>DailyLife Hub membantu menyusun hari, menyimpan to‑do, dan memberi ide cepat untuk keseharian.</p>
+
+        <div class="grid">
+          <div class="widget">
+            <h3>Quote Harian</h3>
+            <div id="quote" class="muted">Memuat...</div>
+            <div style="margin-top:8px;text-align:right">
+              <button class="btn" id="newQuote">Dapatkan Quote Baru</button>
+            </div>
+          </div>
+
+          <div class="widget">
+            <h3>Tip Cepat</h3>
+            <div id="tip" class="tip">Memuat tips...</div>
+            <div style="margin-top:8px;text-align:right">
+              <button class="btn" id="nextTip">Selanjutnya</button>
+            </div>
+          </div>
+
+          <div class="widget">
+            <h3>Resep Sederhana</h3>
+            <div id="recipe" class="muted">Pilih bahan di bawah lalu lihat resep cepat.</div>
+            <div style="margin-top:8px">
+              <select id="ingredientsSelect" class="btn" style="min-width:100%">
+                <option value="egg_rice">Nasi + Telur</option>
+                <option value="pasta_tomato">Pasta + Tomat</option>
+                <option value="bread_avocado">Roti + Alpukat</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="widget">
+            <h3>Cuaca Lokal (dummy)</h3>
+            <div class="muted">Anda bisa menghubungkan API cuaca di versi lanjutan.</div>
+            <div style="margin-top:8px"><strong id="fakeWeather">28°C • Cerah</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:260px;text-align:center">
+        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><rect rx='30' width='100%' height='100%' fill='%230d1220'/><text x='50%' y='52%' fill='%23fff' font-size='20' font-family='Inter' text-anchor='middle'>DailyLife</text></svg>" alt="illustration" style="width:100%;border-radius:12px;"/>
+      </div>
+    </section>
+
+    <section style="margin-top:16px" class="card">
+      <h3 style="margin-top:0">To‑Do Harian</h3>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input id="todoInput" placeholder="Tambahkan tugas..." type="text" />
+        <button class="btn" id="addTodo">Tambah</button>
+      </div>
+      <div id="todoList" class="todo-list"></div>
+      <div style="margin-top:10px;color:var(--muted);font-size:13px">Tugas disimpan di browser (localStorage).</div>
+    </section>
+
+  </main>
+
+  <aside class="right">
+    <div class="card widget">
+      <h3>Search Cepat</h3>
+      <div class="search">
+        <input id="quickSearch" placeholder="Cari resep, tips, atau item..." type="text" />
+        <button class="btn" id="doSearch">Cari</button>
+      </div>
+      <div id="searchResults" style="margin-top:10px;color:var(--muted);font-size:13px"></div>
+    </div>
+
+    <div class="card widget">
+      <h3>Tracker Kebiasaan Singkat</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <label><input type="checkbox" id="habitWater"/> Minum 8 gelas</label>
+        <label><input type="checkbox" id="habitExercise"/> Olahraga 20 menit</label>
+        <label><input type="checkbox" id="habitRead"/> Baca 30 menit</label>
+      </div>
+    </div>
+
+    <div class="card widget">
+      <h3>Quick Links</h3>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">
+        <a class="btn" href="#">Belanja</a>
+        <a class="btn" href="#">Resep Favorit</a>
+        <a class="btn" href="#">Catatan</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<footer>
+  Dibuat dengan ❤️ — buka file ini sebagai <strong>index.html</strong> di browser Anda.
+</footer>
+
+  </div>  <script>
+    // Simple client-side app (no external libs). Keep variables small and readable.
+    const quotes = [
+      "Kerjakan yang kamu bisa hari ini, esok akan lebih baik.",
+      "Hal kecil yang konsisten menghasilkan perubahan besar.",
+      "Jeda sebentar. Tarik napas. Lanjutkan.",
+      "Produktivitas bukan tentang melakukan lebih banyak, tapi tentang melakukan yang penting."
+    ];
+
+    const tips = [
+      "Rapikan meja Anda 5 menit setiap pagi — fokus sering ikut.",
+      "Siapkan pakaian dan tas kerja di malam sebelumnya.",
+      "Gunakan timer 25 menit (Pomodoro) untuk tugas panjang.",
+      "Minum segelas air saat bangun untuk mulai terhidrasi.",
+    ];
+
+    const recipes = {
+      egg_rice: "Nasi goreng telur simpel: tumis bawang, masukkan nasi, kecap, dan telur. Sajikan hangat.",
+      pasta_tomato: "Pasta saus tomat: masak pasta, tumis bawang dan tomat, tumbuk sedikit, campur pasta. Taburi keju.",
+      bread_avocado: "Roti alpukat: oles alpukat, tambahkan garam, merica, dan perasan jeruk nipis."
+    };
+
+    // DOM refs
+    const quoteEl = document.getElementById('quote');
+    const tipEl = document.getElementById('tip');
+    const recipeEl = document.getElementById('recipe');
+    const ingredientsSelect = document.getElementById('ingredientsSelect');
+    const fakeWeather = document.getElementById('fakeWeather');
+    const timeEl = document.getElementById('time');
+
+    // init
+    function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+    function renderQuote(){quoteEl.textContent = '"' + pick(quotes) + '"'}
+    function renderTip(){tipEl.textContent = pick(tips)}
+
+    document.getElementById('newQuote').addEventListener('click', renderQuote);
+    document.getElementById('nextTip').addEventListener('click', renderTip);
+    ingredientsSelect.addEventListener('change', ()=>{
+      recipeEl.textContent = recipes[ingredientsSelect.value];
+    });
+
+    // theme toggle (simple)
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.addEventListener('click', ()=>{
+      document.body.classList.toggle('light-theme');
+      if(document.body.classList.contains('light-theme')){
+        document.body.style.background = 'linear-gradient(180deg,#f7fbff,#eef6fb)';
+        document.body.style.color = '#0b1220';
+      } else {
+        document.body.style.background = 'linear-gradient(180deg,#071023 0%, #071229 50%, #021025 100%)';
+        document.body.style.color = '#e6eef8';
+      }
+    });
+
+    // Quick clock
+    function updateClock(){
+      const d=new Date();
+      const hh=String(d.getHours()).padStart(2,'0');
+      const mm=String(d.getMinutes()).padStart(2,'0');
+      timeEl.textContent = hh+':'+mm;
+    }
+    setInterval(updateClock,1000); updateClock();
+
+    // fake weather cycling (demo)
+    const weatherStates = ['28°C • Cerah','26°C • Berawan','30°C • Panas','24°C • Hujan ringan'];
+    setInterval(()=>{fakeWeather.textContent = pick(weatherStates)},7000);
+
+    // --- ToDo persistence ---
+    const todoInput = document.getElementById('todoInput');
+    const addTodoBtn = document.getElementById('addTodo');
+    const todoListEl = document.getElementById('todoList');
+    let todos = JSON.parse(localStorage.getItem('dl_todos')||'[]');
+
+    function saveTodos(){localStorage.setItem('dl_todos', JSON.stringify(todos));}
+    function renderTodos(){
+      todoListEl.innerHTML = '';
+      todos.forEach((t, i)=>{
+        const item = document.createElement('div');
+        item.className = 'todo-item'+(t.done? ' completed':'');
+        item.innerHTML = `
+          <input type="checkbox" ${t.done? 'checked':''} />
+          <div>${escapeHtml(t.text)}</div>
+          <div class="todo-actions">
+            <button class="btn btn-sm" data-action="del" data-i="${i}">Hapus</button>
+          </div>
+        `;
+        const chk = item.querySelector('input[type=checkbox]');
+        chk.addEventListener('change',()=>{todos[i].done = chk.checked; saveTodos(); renderTodos();});
+        item.querySelector('[data-action=del]').addEventListener('click',()=>{todos.splice(i,1); saveTodos(); renderTodos();});
+        todoListEl.appendChild(item);
+      });
+    }
+
+    addTodoBtn.addEventListener('click', ()=>{
+      const v = todoInput.value.trim();
+      if(!v) return alert('Isi tugas dulu');
+      todos.push({text:v, done:false});
+      todoInput.value=''; saveTodos(); renderTodos();
+    });
+
+    // Quick search (client-side mock)
+    document.getElementById('doSearch').addEventListener('click', ()=>{
+      const q = document.getElementById('quickSearch').value.toLowerCase();
+      const res = [];
+      if(q.includes('resep')||q.includes('nasi')||q.includes('telur')) res.push('Coba "Nasi goreng telur" — cepat dan hemat.');
+      if(q.includes('tips')||q.includes('pomodoro')) res.push('Gunakan teknik Pomodoro: 25 menit kerja + 5 menit istirahat.');
+      if(q.includes('tugas')||q.includes('todo')) res.push('Tambahkan tugas di panel To‑Do di kiri.');
+      document.getElementById('searchResults').textContent = res.length? res.join('\n') : 'Tidak ada hasil, coba kata kunci lain.';
+    });
+
+    // simple habit persistence
+    ['habitWater','habitExercise','habitRead'].forEach(id=>{
+      const el = document.getElementById(id);
+      el.checked = localStorage.getItem(id)==='1';
+      el.addEventListener('change', ()=>{localStorage.setItem(id, el.checked? '1':'0')});
+    });
+
+    // utilities
+    function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    // initial renders
+    renderQuote(); renderTip(); recipeEl.textContent = recipes[ingredientsSelect.value]; renderTodos();
+
+  </script></body>
+  </html>
